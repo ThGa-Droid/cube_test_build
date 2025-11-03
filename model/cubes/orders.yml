@@ -1,37 +1,67 @@
 cubes:
   - name: orders
-    sql: >
-      select 1 as id, 100 as amount, 'new' status
-      UNION ALL
-      select 2 as id, 200 as amount, 'new' status
-      UNION ALL
-      select 3 as id, 300 as amount, 'processed' status
-      UNION ALL
-      select 4 as id, 500 as amount, 'processed' status
-      UNION ALL
-      select 5 as id, 600 as amount, 'shipped' status
+    sql_table: public.orders
+    public: false
 
-    joins: []
+    joins:
+      - name: customers
+        sql: "{CUBE}.o_custkey = {customers.customer_key}"
+        relationship: many_to_one
 
     dimensions:
-      - name: id
-        sql: id
+      - name: order_key
+        sql: "{CUBE}.o_orderkey"
         type: number
         primary_key: true
 
-      - name: status
-        sql: status
+      - name: customer_key
+        sql: "{CUBE}.o_custkey"
+        type: number
+        
+      - name: order_status
+        sql: "{CUBE}.o_orderstatus"
+        type: string
+        
+      - name: total_price
+        sql: "{CUBE}.o_totalprice"
+        type: number
+        
+      - name: order_date
+        sql: "{CUBE}.o_orderdate"
+        type: time
+        
+      - name: order_priority
+        sql: "{CUBE}.o_orderpriority"
+        type: string
+        
+      - name: clerk
+        sql: "{CUBE}.o_clerk"
+        type: string
+        
+      - name: ship_priority
+        sql: "{CUBE}.o_shippriority"
+        type: number
+        
+      - name: comment
+        sql: "{CUBE}.o_comment"
         type: string
 
     measures:
       - name: count
         type: count
-
-      - name: amount
-        sql: amount
+        
+      - name: total_order_value
+        sql: total_price
         type: sum
-
-    pre_aggregations:
-      # Pre-aggregation definitions go here.
-      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
-
+        
+      - name: average_order_value
+        sql: total_price
+        type: avg
+        
+      - name: max_order_value
+        sql: total_price
+        type: max
+        
+      - name: min_order_value
+        sql: total_price
+        type: min

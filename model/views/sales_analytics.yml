@@ -1,0 +1,132 @@
+views:
+  - name: sales_analytics
+    description: "Comprehensive sales analytics view combining line items, orders, customers, and geographic data"
+    
+    cubes:
+      - join_path: line_items
+        includes:
+          # Line item dimensions
+          - line_number
+          - quantity
+          - extended_price
+          - discount
+          - tax
+          - return_flag
+          - line_status
+          - ship_date
+          - commit_date
+          - receipt_date
+          - ship_instructions
+          - ship_mode
+          - discount_amount
+          - net_price
+          - total_charge_per_item
+          
+          # Line item measures
+          - count
+          - total_quantity
+          - total_extended_price
+          - total_discount_amount
+          - total_net_price
+          - total_charge
+          - average_quantity
+          - average_extended_price
+          - average_discount
+
+      - join_path: line_items.orders
+        prefix: true
+        includes:
+          # Order dimensions
+          - order_key
+          - order_status
+          - total_price
+          - order_date
+          - order_priority
+          - clerk
+          - ship_priority
+          
+          # Order measures
+          - count
+          - total_order_value
+          - average_order_value
+          - max_order_value
+          - min_order_value
+
+      - join_path: line_items.orders.customers
+        prefix: true
+        includes:
+          # Customer dimensions
+          - customer_key
+          - name
+          - address
+          - phone
+          - account_balance
+          - market_segment
+          
+          # Customer measures
+          - count
+          - total_account_balance
+          - average_account_balance
+
+      - join_path: line_items.orders.customers.nations
+        prefix: true
+        includes:
+          # Nation dimensions
+          - nation_key
+          - name
+          
+          # Nation measures
+          - count
+
+      - join_path: line_items.orders.customers.nations.regions
+        prefix: true
+        includes:
+          # Region dimensions
+          - region_key
+          - name
+          
+          # Region measures
+          - count
+
+      - join_path: line_items.parts
+        prefix: true
+        includes:
+          # Part dimensions
+          - part_key
+          - name
+          - manufacturer
+          - brand
+          - type
+          - size
+          - container
+          - retail_price
+          
+          # Part measures
+          - count
+          - total_retail_price
+          - average_retail_price
+          - average_size
+
+      - join_path: line_items.suppliers
+        prefix: true
+        includes:
+          # Supplier dimensions
+          - supplier_key
+          - name
+          - address
+          - phone
+          - account_balance
+          
+          # Supplier measures
+          - count
+          - total_account_balance
+          - average_account_balance
+
+      - join_path: line_items.suppliers.nations
+        prefix: true
+        includes:
+          # Supplier nation dimensions
+          - name: nation_key
+            alias: supplier_nation_key
+          - name: name
+            alias: supplier_nation_name

@@ -1,0 +1,51 @@
+cubes:
+  - name: suppliers
+    sql_table: public.supplier
+    public: false
+
+    joins:
+      - name: nations
+        sql: "{CUBE}.s_nationkey = {nations.nation_key}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: supplier_key
+        sql: "{CUBE}.s_suppkey"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.s_name"
+        type: string
+        
+      - name: address
+        sql: "{CUBE}.s_address"
+        type: string
+        
+      - name: nation_key
+        sql: "{CUBE}.s_nationkey"
+        type: number
+        
+      - name: phone
+        sql: "{CUBE}.s_phone"
+        type: string
+        
+      - name: account_balance
+        sql: "{CUBE}.s_acctbal"
+        type: number
+        
+      - name: comment
+        sql: "{CUBE}.s_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count
+        
+      - name: total_account_balance
+        sql: account_balance
+        type: sum
+        
+      - name: average_account_balance
+        sql: account_balance
+        type: avg

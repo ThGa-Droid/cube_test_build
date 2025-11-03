@@ -1,0 +1,73 @@
+views:
+  - name: supply_chain_analytics
+    description: "Supply chain analytics view focusing on parts, suppliers, and inventory"
+    
+    cubes:
+      - join_path: part_supplier
+        includes:
+          # Part supplier dimensions
+          - part_key
+          - supplier_key
+          - available_quantity
+          - supply_cost
+          
+          # Part supplier measures
+          - count
+          - total_available_quantity
+          - total_supply_cost
+          - average_supply_cost
+          - average_available_quantity
+
+      - join_path: part_supplier.parts
+        prefix: true
+        includes:
+          # Part dimensions
+          - part_key
+          - name
+          - manufacturer
+          - brand
+          - type
+          - size
+          - container
+          - retail_price
+          
+          # Part measures
+          - count
+          - total_retail_price
+          - average_retail_price
+          - average_size
+
+      - join_path: part_supplier.suppliers
+        prefix: true
+        includes:
+          # Supplier dimensions
+          - supplier_key
+          - name
+          - address
+          - phone
+          - account_balance
+          
+          # Supplier measures
+          - count
+          - total_account_balance
+          - average_account_balance
+
+      - join_path: part_supplier.suppliers.nations
+        prefix: true
+        includes:
+          # Supplier nation dimensions
+          - nation_key
+          - name
+          
+          # Supplier nation measures
+          - count
+
+      - join_path: part_supplier.suppliers.nations.regions
+        prefix: true
+        includes:
+          # Region dimensions
+          - region_key
+          - name
+          
+          # Region measures
+          - count

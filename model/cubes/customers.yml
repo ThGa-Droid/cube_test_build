@@ -1,0 +1,55 @@
+cubes:
+  - name: customers
+    sql_table: public.customer
+    public: false
+
+    joins:
+      - name: nations
+        sql: "{CUBE}.c_nationkey = {nations.nation_key}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: customer_key
+        sql: "{CUBE}.c_custkey"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.c_name"
+        type: string
+        
+      - name: address
+        sql: "{CUBE}.c_address"
+        type: string
+        
+      - name: nation_key
+        sql: "{CUBE}.c_nationkey"
+        type: number
+        
+      - name: phone
+        sql: "{CUBE}.c_phone"
+        type: string
+        
+      - name: account_balance
+        sql: "{CUBE}.c_acctbal"
+        type: number
+        
+      - name: market_segment
+        sql: "{CUBE}.c_mktsegment"
+        type: string
+        
+      - name: comment
+        sql: "{CUBE}.c_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count
+        
+      - name: total_account_balance
+        sql: account_balance
+        type: sum
+        
+      - name: average_account_balance
+        sql: account_balance
+        type: avg

@@ -1,0 +1,133 @@
+cubes:
+  - name: line_items
+    sql_table: public.lineitem
+    public: false
+
+    joins:
+      - name: orders
+        sql: "{CUBE}.l_orderkey = {orders.order_key}"
+        relationship: many_to_one
+        
+      - name: parts
+        sql: "{CUBE}.l_partkey = {parts.part_key}"
+        relationship: many_to_one
+        
+      - name: suppliers
+        sql: "{CUBE}.l_suppkey = {suppliers.supplier_key}"
+        relationship: many_to_one
+
+    dimensions:
+      # Composite primary key
+      - name: order_key
+        sql: "{CUBE}.l_orderkey"
+        type: number
+        
+      - name: part_key
+        sql: "{CUBE}.l_partkey"
+        type: number
+        
+      - name: supplier_key
+        sql: "{CUBE}.l_suppkey"
+        type: number
+        
+      - name: line_number
+        sql: "{CUBE}.l_linenumber"
+        type: number
+        primary_key: true
+        
+      - name: quantity
+        sql: "{CUBE}.l_quantity"
+        type: number
+        
+      - name: extended_price
+        sql: "{CUBE}.l_extendedprice"
+        type: number
+        
+      - name: discount
+        sql: "{CUBE}.l_discount"
+        type: number
+        
+      - name: tax
+        sql: "{CUBE}.l_tax"
+        type: number
+        
+      - name: return_flag
+        sql: "{CUBE}.l_returnflag"
+        type: string
+        
+      - name: line_status
+        sql: "{CUBE}.l_linestatus"
+        type: string
+        
+      - name: ship_date
+        sql: "{CUBE}.l_shipdate"
+        type: time
+        
+      - name: commit_date
+        sql: "{CUBE}.l_commitdate"
+        type: time
+        
+      - name: receipt_date
+        sql: "{CUBE}.l_receiptdate"
+        type: time
+        
+      - name: ship_instructions
+        sql: "{CUBE}.l_shipinstruct"
+        type: string
+        
+      - name: ship_mode
+        sql: "{CUBE}.l_shipmode"
+        type: string
+        
+      - name: comment
+        sql: "{CUBE}.l_comment"
+        type: string
+        
+      # Calculated dimensions
+      - name: discount_amount
+        sql: "{CUBE}.l_extendedprice * {CUBE}.l_discount"
+        type: number
+        
+      - name: net_price
+        sql: "{CUBE}.l_extendedprice * (1 - {CUBE}.l_discount)"
+        type: number
+        
+      - name: total_charge_per_item
+        sql: "{CUBE}.l_extendedprice * (1 - {CUBE}.l_discount) * (1 + {CUBE}.l_tax)"
+        type: number
+
+    measures:
+      - name: count
+        type: count
+        
+      - name: total_quantity
+        sql: quantity
+        type: sum
+        
+      - name: total_extended_price
+        sql: extended_price
+        type: sum
+        
+      - name: total_discount_amount
+        sql: discount_amount
+        type: sum
+        
+      - name: total_net_price
+        sql: net_price
+        type: sum
+        
+      - name: total_charge
+        sql: total_charge_per_item
+        type: sum
+        
+      - name: average_quantity
+        sql: quantity
+        type: avg
+        
+      - name: average_extended_price
+        sql: extended_price
+        type: avg
+        
+      - name: average_discount
+        sql: discount
+        type: avg

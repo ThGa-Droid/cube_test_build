@@ -1,0 +1,56 @@
+cubes:
+  - name: part_supplier
+    sql_table: public.partsupp
+    public: false
+
+    joins:
+      - name: parts
+        sql: "{CUBE}.ps_partkey = {parts.part_key}"
+        relationship: many_to_one
+        
+      - name: suppliers
+        sql: "{CUBE}.ps_suppkey = {suppliers.supplier_key}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: part_key
+        sql: "{CUBE}.ps_partkey"
+        type: number
+        primary_key: true
+        
+      - name: supplier_key
+        sql: "{CUBE}.ps_suppkey"
+        type: number
+        primary_key: true
+        
+      - name: available_quantity
+        sql: "{CUBE}.ps_availqty"
+        type: number
+        
+      - name: supply_cost
+        sql: "{CUBE}.ps_supplycost"
+        type: number
+        
+      - name: comment
+        sql: "{CUBE}.ps_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count
+        
+      - name: total_available_quantity
+        sql: available_quantity
+        type: sum
+        
+      - name: total_supply_cost
+        sql: supply_cost
+        type: sum
+        
+      - name: average_supply_cost
+        sql: supply_cost
+        type: avg
+        
+      - name: average_available_quantity
+        sql: available_quantity
+        type: avg
