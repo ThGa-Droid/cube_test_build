@@ -1,0 +1,58 @@
+cubes:
+  - name: parts
+    sql_table: public.part
+    public: false
+
+    dimensions:
+      - name: part_key
+        sql: "{CUBE}.p_partkey"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.p_name"
+        type: string
+        
+      - name: manufacturer
+        sql: "{CUBE}.p_mfgr"
+        type: string
+        
+      - name: brand
+        sql: "{CUBE}.p_brand"
+        type: string
+        
+      - name: type
+        sql: "{CUBE}.p_type"
+        type: string
+        
+      - name: size
+        sql: "{CUBE}.p_size"
+        type: number
+        
+      - name: container
+        sql: "{CUBE}.p_container"
+        type: string
+        
+      - name: retail_price
+        sql: "{CUBE}.p_retailprice"
+        type: number
+        
+      - name: comment
+        sql: "{CUBE}.p_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count
+        
+      - name: total_retail_price
+        sql: retail_price
+        type: sum
+        
+      - name: average_retail_price
+        sql: retail_price
+        type: avg
+        
+      - name: average_size
+        sql: size
+        type: avg

@@ -1,0 +1,22 @@
+cubes:
+  - name: regions
+    sql_table: public.region
+    public: false
+
+    dimensions:
+      - name: region_key
+        sql: "{CUBE}.r_regionkey"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.r_name"
+        type: string
+        
+      - name: comment
+        sql: "{CUBE}.r_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count

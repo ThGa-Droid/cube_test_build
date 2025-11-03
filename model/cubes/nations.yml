@@ -1,0 +1,31 @@
+cubes:
+  - name: nations
+    sql_table: public.nation
+    public: false
+
+    joins:
+      - name: regions
+        sql: "{CUBE}.n_regionkey = {regions.region_key}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: nation_key
+        sql: "{CUBE}.n_nationkey"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.n_name"
+        type: string
+        
+      - name: region_key
+        sql: "{CUBE}.n_regionkey"
+        type: number
+        
+      - name: comment
+        sql: "{CUBE}.n_comment"
+        type: string
+
+    measures:
+      - name: count
+        type: count

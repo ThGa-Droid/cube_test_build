@@ -1,0 +1,59 @@
+views:
+  - name: customer_analytics
+    description: "Customer analytics view focusing on orders and customer behavior"
+    
+    cubes:
+      - join_path: orders
+        includes:
+          # Order dimensions
+          - order_key
+          - customer_key
+          - order_status
+          - total_price
+          - order_date
+          - order_priority
+          - clerk
+          - ship_priority
+          
+          # Order measures
+          - count
+          - total_order_value
+          - average_order_value
+          - max_order_value
+          - min_order_value
+
+      - join_path: orders.customers
+        prefix: true
+        includes:
+          # Customer dimensions
+          - customer_key
+          - name
+          - address
+          - phone
+          - account_balance
+          - market_segment
+          
+          # Customer measures
+          - count
+          - total_account_balance
+          - average_account_balance
+
+      - join_path: orders.customers.nations
+        prefix: true
+        includes:
+          # Nation dimensions
+          - nation_key
+          - name
+          
+          # Nation measures
+          - count
+
+      - join_path: orders.customers.nations.regions
+        prefix: true
+        includes:
+          # Region dimensions
+          - region_key
+          - name
+          
+          # Region measures
+          - count
